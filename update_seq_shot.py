@@ -1,5 +1,7 @@
 #python
-
+#----------------------------------------------------------
+# 2013-10-23 Add Edit
+#----------------------------------------------------------
 
 import re
 import os
@@ -63,9 +65,10 @@ for i in range(n):
 		lx.out("New path: ",newpath)
 
 		# Create folder
-		createDir=os.path.dirname(newpath)
+		createDir=os.path.dirname(newpath+"\\")
 		if not os.path.exists(createDir):
 			os.makedirs(createDir)
+		lx.out("Created path: ",createDir)
 
 		#using the new path
 		lx.eval("item.channel renderOutput$filename {%s}" % newFile)
