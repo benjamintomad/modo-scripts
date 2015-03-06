@@ -4,7 +4,7 @@ import lx
 
 # set frame range and intialize counter
 firstFrame = 0
-lastFrame = 120
+lastFrame = 10
 counter = firstFrame
 counterRot = firstFrame * 3
 
@@ -14,7 +14,9 @@ n = lx.eval1("query sceneservice item.N ?")
 locator=lx.eval('query sceneservice selection ? locator')
 
 # set destination file and folder
-folder = "W:/RTS/People/Btomad/_RTS_test/richardOld/renders/turntable/v008/bake/"
+# folder = "W:/RTS/People/Btomad/_RTS_test/richardOld/renders/turntable/v010/bake/"
+folder = lx.eval('item.channel renderOutput$filename ?')
+folder = folder[ : folder.rfind("\\") +1]
 strFileName = folder + "body_"
 
 # move to the first frame/intialize
@@ -30,7 +32,7 @@ for bakePerFrame in range(firstFrame, lastFrame):
 	lx.eval('transform.channel rot.Y %s.0' %counterRot)
 
 	# lx.out(fileOutput)
-	lx.eval('bake.obj filename:%s cage:{} dist:0.0' %fileOutput)
+	lx.eval('bake.obj filename:%s format:openexr cage:{} dist:0.0' %fileOutput)
 	
 	counterRot+=3
 	counter+=1
