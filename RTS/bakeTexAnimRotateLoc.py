@@ -2,26 +2,43 @@
 
 import lx
 
-# set frame range and intialize counter
+# set frame range and intialize counters
 firstFrame = 0
-lastFrame = 10
+lastFrame = 3
 counter = firstFrame
 counterRot = firstFrame * 3
+
+
+#get the name of the character
+sceneName = lx.eval("query sceneservice scene.name ? current")
+scenePart = sceneName.split ('_') 
+character = scenePart[0]
+
 
 # get all items
 n = lx.eval1("query sceneservice item.N ?")
 
+# select the render output
+for i in range(n):
+	itemType = lx.eval("query sceneservice item.type ? %s" % i)
+	if(itemType == "renderOutput"):
+		lx.eval('select.itemPattern bake')
+
+# select the uv map
+lx.eval('select.vertexMap pack txuv replace')
+
+
+#select the locator
+lx.eval('select.itemPattern GRP_%s add' %character )
 locator=lx.eval('query sceneservice selection ? locator')
 
 # set destination file and folder
-# folder = "W:/RTS/People/Btomad/_RTS_test/richardOld/renders/turntable/v010/bake/"
 folder = lx.eval('item.channel renderOutput$filename ?')
 folder = folder[ : folder.rfind("\\") +1]
 strFileName = folder + "body_"
 
 # move to the first frame/intialize
 lx.eval("time.step frame first")
-
 
 # bake the object to render output
 for bakePerFrame in range(firstFrame, lastFrame):
