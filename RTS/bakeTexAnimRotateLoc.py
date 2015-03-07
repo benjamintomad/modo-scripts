@@ -3,8 +3,9 @@
 import lx
 
 # set frame range and intialize counters
-firstFrame = 0
-lastFrame = 3
+f=lx.args()
+firstFrame = f[0]
+lastFrame = f[1]
 counter = firstFrame
 counterRot = firstFrame * 3
 
