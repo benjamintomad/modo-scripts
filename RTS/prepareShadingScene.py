@@ -15,10 +15,9 @@ lx.out(pathPart)
 character = str(pathPart[0])
 version = str(pathPart[-1].strip('.lxo'))
 
-outputPath = str('W:/RTS/Experimental/rnd/Renders/sha/' + character + '/modo/' + version + '/')
 outputPath = str('W:/RTS/Experimental/rnd/Renders/sha/%s/modo/%s/' % (character , version))
 fullPath = outputPath + character
-outputPathBake = str('W:/RTS/Experimental/rnd/Renders/sha/' + character + '/modo/' + 'bake/' + version + '/')
+outputPathBake = str('W:/RTS/Experimental/rnd/Renders/sha/%s/modo/bake/%s/' % (character , version))
 fullPathBake = outputPathBake + character
 lx.out(fullPathBake)
 
