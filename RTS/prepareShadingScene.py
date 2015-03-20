@@ -172,7 +172,11 @@ def prepScene():
     lx.eval('shader.setEffect shade.alpha')
     setRenderOutputPath()
 
-
+    # set render ouputs colorspace to linear
+    allOutputs = pym.Render_Output_ID_All()
+    for out in allOutputs:
+        pym.Item_Select(out)
+        pym.Item_Channel_Edit('renderOutput$colorspace', 'nuke-default:linear')
 
 
     # create the render pass group and assign the outputs channels
@@ -261,16 +265,3 @@ for t in tagNames:
 
 if count == 0:
     prepScene()
-
-
-
-
-
-
-
-
-
-
-
-
-
