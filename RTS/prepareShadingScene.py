@@ -97,16 +97,7 @@ def tagScene():
         lx.eval('item.tag string CMMT "prep sha OK"')
 
 
-# check if the scene has already been prepared
-tagNames = pym.Scene_Get_Item_Tags_All()
-count = 0
-for t in tagNames:
-    if t == 'prep sha OK':
-        count += 1
-
-if count == 0:
-
-
+def prepScene():
     # prepare items : visibility and cleanup
     prepareItems()
 
@@ -255,6 +246,23 @@ if count == 0:
 
     # tag the scene
     tagScene()
+
+
+
+# check if the scene has already been prepared, if not, start the preparation
+tagNames = pym.Scene_Get_Item_Tags_All()
+count = 0
+lx.eval('dialog.msg "Scene already prepared"')
+
+for t in tagNames:
+    if t == 'prep sha OK':
+        count += 1
+        lx.eval('dialog.open')
+
+if count == 0:
+    prepScene()
+
+
 
 
 
