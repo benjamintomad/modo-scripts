@@ -1,4 +1,4 @@
-#python
+# python
 
 from pyModo import pyModo as pym
 import lx
@@ -7,12 +7,13 @@ import os
 
 
 
-# define folder, version and character
+# define folder, version and character and set current scene
 currentScene = pym.Scene_Current_Index_Get()
+pym.Scene_Current_Set(currentScene)
+
 path = pym.Scene_Name(currentScene)[0]
 
-folder = 'W:/RTS/Experimental/rnd/Renders/sha'
-
+folder = '/home/ben/Documents/tests/modo/prepareShadingScene/renders/sha'
 
 pathPart = path.split('_')
 character = str(pathPart[0])
@@ -24,14 +25,12 @@ outputPathBake = str('%s/%s/modo/bake/%s/' % (folder, character, version))
 fullPathBake = outputPathBake + character
 
 
-
 def createRenderOutput():
     lx.eval('shader.create renderOutput')
 
+
 def setRenderOutputPath():
-
     currentOutput = str(pym.Render_Output_Name_Selected()[0])
-
 
     if currentOutput == 'bake' or currentOutput == 'bakeAlpha':
         output = outputPathBake
@@ -39,7 +38,6 @@ def setRenderOutputPath():
     else:
         output = outputPath
         path = fullPath
-
 
     if os.path.exists(output):
         lx.eval('item.channel renderOutput$filename "%s"' % path)
@@ -49,19 +47,22 @@ def setRenderOutputPath():
         lx.eval('item.channel renderOutput$filename "%s"' % path)
         lx.eval('item.channel renderOutput$format openexr')
 
+
 def createRNpasses():
     lx.eval('group.create RN_passes pass empty')
 
+
 def configOCIO():
     ocioNames = pym.Scene_Get_Item_Names_All()
-    for sel in ocioNames:
-        if sel == 'Scene':
-            pym.Item_Select(sel)
+    for scn in ocioNames:
+        if scn == 'Scene':
+            pym.Item_Select(scn)
             pym.Item_Channel_Edit('ocioConfig', 'nuke-default')
             pym.Item_Channel_Edit('def8bitColorspace', 'nuke-default:sRGB')
             pym.Item_Channel_Edit('def16bitColorspace', 'nuke-default:linear')
             pym.Item_Channel_Edit('defFloatColorspace', 'nuke-default:linear')
     pym.Item_DeSelect()
+
 
 def prepareItems():
     getI = pym.Scene_Get_Item_IDs_All()
@@ -69,14 +70,14 @@ def prepareItems():
         itemType = pym.Item_Type_Get(it)
         for t in itemType:
             if t == 'mesh' or t == 'locator':
-                lx.out(it)
                 pym.Item_Select(it)
                 pym.Item_Channel_Edit('visible', 'default')
                 pym.Item_DeSelect()
             if t == 'mesh':
-                lx.eval('select.Item %s add' %it)
+                lx.eval('select.Item %s add' % it)
     lx.eval('mesh.cleanup true')
     pym.Item_DeSelect()
+
 
 def tagScene():
     tagNames = pym.Scene_Get_Item_Tags_All()
@@ -84,20 +85,16 @@ def tagScene():
     check = int(0)
 
     for i in itemNames:
-        if i == 'GRP_%s' %character:
+        if i == 'GRP_%s' % character:
             id = pym.Item_ID_Get(i)
 
     for tag in tagNames:
-        lx.out(tag)
         if tag == 'prep sha OK':
             check += 1
-            lx.out (check)
     if check == 0:
         pym.Item_Select(id)
         lx.eval('item.tagAdd CMMT')
         lx.eval('item.tag string CMMT "prep sha OK"')
-
-
 
 
 # check if the scene has already been prepared
@@ -113,6 +110,17 @@ if count == 0:
     # prepare items : visibility and cleanup
     prepareItems()
 
+    # select the render item first
+    render = pym.Render_ID_All()
+    pym.Item_Select(render)
+
+    # set the output pattern
+    pym.Item_Channel_Edit('outPat', "[<pass>]_[<output>]_<FFFF>")
+
+    # delete default render outputs
+    oldOutputs = pym.Render_Output_ID_All()
+    for out in oldOutputs:
+        pym.Item_Delete(out)
 
     # create render output sha group
     pym.Group_Add_New()
@@ -146,8 +154,15 @@ if count == 0:
     lx.eval('shader.setEffect shade.illumDir')
     setRenderOutputPath()
 
+    # create SSS output
+    createRenderOutput()
+    currentOutput = pym.Render_Output_ID_Selected()
+    pym.Item_Name_Set(currentOutput, 'SSS')
+    lx.eval('shader.setEffect shade.subsurface')
+    setRenderOutputPath()
 
     pym.Item_DeSelect()
+
     # create render output bake group
     pym.Group_Add_New()
     currentShaGroup = str(pym.Group_ID_Selected()[0])
@@ -179,8 +194,8 @@ if count == 0:
         if itemName == "RN_passes":
             passGroup = pym.Item_ID_Get(itemName)
             pym.Item_Select(passGroup)
-            lx.eval ('group.layer name:sha transfer:false grpType:pass')
-            lx.eval ('group.layer name:bke transfer:false grpType:pass')
+            lx.eval('group.layer name:sha transfer:false grpType:pass')
+            lx.eval('group.layer name:bke transfer:false grpType:pass')
 
         if itemName == 'Outputs_bke' or itemName == 'Outputs_sha':
             channelNames = pym.Item_Channel_Get_Names(i)
@@ -188,7 +203,7 @@ if count == 0:
             for channel in channelNames:
                 if channel == 'enable':
                     pym.Item_Channel_Select(i, channel)
-                    lx.eval('group.edit add chan item:%s' %passGroup)
+                    lx.eval('group.edit add chan item:%s' % passGroup)
 
 
 
@@ -204,13 +219,12 @@ if count == 0:
         if name == 'bke':
             pym.Item_Select(i)
             lx.eval('layer.enable enable:toggle')
-            lx.eval('layer.active %s type:pass' %i)
+            lx.eval('layer.active %s type:pass' % i)
 
     for output in allItems:
         outputName = pym.Item_Name_Get(output)
         if outputName == 'Outputs_sha':
             channelNames = pym.Item_Channel_Get_Names(output)
-            # lx.out(channelNames)
             for channel in channelNames:
                 if channel == 'enable':
                     pym.Item_Channel_Edit(channel, 'enable')
@@ -223,13 +237,12 @@ if count == 0:
         if name == 'sha':
             pym.Item_Select(i)
             lx.eval('layer.enable enable:toggle')
-            lx.eval('layer.active %s type:pass' %i)
+            lx.eval('layer.active %s type:pass' % i)
 
     for output in allItems:
         outputName = pym.Item_Name_Get(output)
         if outputName == 'Outputs_bke':
             channelNames = pym.Item_Channel_Get_Names(output)
-            # lx.out(channelNames)
             for channel in channelNames:
                 if channel == 'enable':
                     pym.Item_Channel_Edit(channel, 'enable')
