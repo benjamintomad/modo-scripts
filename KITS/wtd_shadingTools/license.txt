@@ -1,0 +1,7 @@
+You are allowed to use this kit for commercial and private use.
+You are also allowed to change and reuse the source code itself.
+However, if you do so please post your new script in the luxology forums so that we all benefit from your work :)
+
+I have created this kit as a personal training.
+I am not a professional programmer so bugs and errors might appear.
+Use the kit at your own risk.
