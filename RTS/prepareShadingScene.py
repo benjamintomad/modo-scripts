@@ -115,7 +115,7 @@ if count == 0:
     pym.Item_Select(render)
 
     # set the output pattern
-    pym.Item_Channel_Edit('outPat', "[_<pass>]_[<output>]_<FFFF>")
+    pym.Item_Channel_Edit('outPat', "_[<pass>]_[<output>]_<FFFF>")
 
     # delete default render outputs
     oldOutputs = pym.Render_Output_ID_All()
