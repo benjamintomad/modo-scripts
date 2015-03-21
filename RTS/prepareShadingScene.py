@@ -101,6 +101,9 @@ def prepScene():
     # prepare items : visibility and cleanup
     prepareItems()
 
+    # create bake group
+    lx.eval('group.create bake_GRP std empty')
+
     # select the render item first
     render = pym.Render_ID_All()
     pym.Item_Select(render)
@@ -228,11 +231,12 @@ def prepScene():
 
 
     # configure sha pass
+
+    # configure bake pass
     for i in allItems:
         name = pym.Item_Name_Get(i)
         if name == 'sha':
             pym.Item_Select(i)
-            lx.eval('layer.enable enable:toggle')
             lx.eval('layer.active %s type:pass' % i)
 
     for output in allItems:
