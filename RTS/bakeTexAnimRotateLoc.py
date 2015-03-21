@@ -35,7 +35,7 @@ locator=lx.eval('query sceneservice selection ? locator')
 
 # set destination file and folder
 folder = lx.eval('item.channel renderOutput$filename ?')
-folder = folder[ : folder.rfind("\\") +1]
+folder = folder[ : folder.rfind("/") +1]
 strFileName = folder + "body_"
 
 # move to the first frame/intialize
