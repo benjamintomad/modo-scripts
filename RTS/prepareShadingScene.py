@@ -159,18 +159,19 @@ def prepScene():
     currentShaGroup = str(pym.Group_ID_Selected()[0])
     pym.Item_Name_Set(currentShaGroup, 'Outputs_bke')
 
-    # create bty bake output
-    createRenderOutput()
-    currentOutput = pym.Render_Output_ID_Selected()
-    pym.Item_Name_Set(currentOutput, 'bake')
-    setRenderOutputPath()
-
     # create alpha bake output
     createRenderOutput()
     currentOutput = pym.Render_Output_ID_Selected()
     pym.Item_Name_Set(currentOutput, 'bakeAlpha')
     lx.eval('shader.setEffect shade.alpha')
     setRenderOutputPath()
+
+    # create bty bake output
+    createRenderOutput()
+    currentOutput = pym.Render_Output_ID_Selected()
+    pym.Item_Name_Set(currentOutput, 'bake')
+    setRenderOutputPath()
+
 
     # set render ouputs colorspace to linear
     allOutputs = pym.Render_Output_ID_All()
