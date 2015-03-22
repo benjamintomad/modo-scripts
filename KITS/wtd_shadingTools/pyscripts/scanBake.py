@@ -18,18 +18,6 @@ character = sceneFile[0]
 renderFolder = '/home/ben/Documents/tests/modo/prepareShadingScene/renders/sha/%s/modo/bake/' % character
 
 
-# returns current bake render output
-def getfilepath(output):
-    for i in allOutputs:
-        pym.Item_Select(i)
-        outputName = pym.Render_Output_Name_Selected()[0]
-        if outputName == output:
-            channels = pym.Item_Channel_Get_Names(i)
-            for chan in channels:
-                if chan == 'filename':
-                    return pym.Item_Channel_Get_Value(chan)
-filepath = getfilepath('bake')
-
 def getcurrentversion():
     allItems = pym.Scene_Get_Item_IDs_All()
     for i in allItems:
