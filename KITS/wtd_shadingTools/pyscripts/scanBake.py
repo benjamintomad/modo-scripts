@@ -30,16 +30,20 @@ def getfilepath(output):
                     return pym.Item_Channel_Get_Value(chan)
 filepath = getfilepath('bake')
 
-# get the current version of the bake
-def getcurrentversion(filepath):
-    pathPart = filepath.split('/')
-    for i in pathPart:
-        if re.match("v([0-9][0-9][0-9])", i, re.IGNORECASE):
-            strVersion = i
-    return strVersion
-currentVersion = getcurrentversion(filepath)
-
-
+def getcurrentversion():
+    allItems = pym.Scene_Get_Item_IDs_All()
+    for i in allItems:
+        typ = pym.Item_Type_Get(i)[0]
+        if typ == 'videoSequence':
+            videoName = pym.Item_Name_Get(i)
+            if re.match('body', videoName):
+                pym.Item_Select(i)
+                currentFile = pym.Item_Channel_Get_Value('pattern')
+                splitFile = currentFile.split('/')
+                for s in splitFile:
+                    if re.match("v([0-9][0-9][0-9])", s, re.IGNORECASE):
+                        return s
+currentVersion = getcurrentversion()
 
 # get all versions
 allVersions = []
