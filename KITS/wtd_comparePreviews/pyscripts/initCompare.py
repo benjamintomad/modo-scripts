@@ -14,8 +14,8 @@ for i in allItems:
         itemName = pym.Item_Name_Get(i)
         if itemName == 'tmpPreviews':
             folderExists = 1
-    else:
-        folderExists = 0
+        else:
+            folderExists = 0
 
 
 
