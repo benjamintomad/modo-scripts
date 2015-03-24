@@ -7,6 +7,7 @@ from pyModo import pyModo as pym
 # search if temp folder already exists
 pym.Item_DeSelect()
 allItems = pym.Scene_Get_Item_IDs_All()
+folderExists = 0
 for i in allItems:
     itemType = pym.Item_Type_Get(i)[0]
     if itemType == 'imageFolder':
