@@ -12,6 +12,8 @@ scene = modo.scene.current()
 
 renderLayer = 'NRM'
 
+outputNames = {'NRM': 'FRN', 'POS': 'FRP', 'DIR': 'FRD'}
+
 character = 'kiki'
 
 firstFrame = str(scene.renderItem.channel('first').get())
@@ -73,11 +75,12 @@ if versions:
 	furGRP.name = 'FUR_meshes'
 
 	# create a new shader FUR group with a color output and an alpha
+
 	rnGroup = scene.addMaterial('mask', 'FUR_bakeSpecial')
 	scene.select(rnGroup)
 	lx.eval('mask.setMesh %s' % furGRP.name)
 
-	bakeCol = scene.addMaterial('renderOutput', 'furBake%s' % renderLayer)
+	bakeCol = scene.addMaterial('renderOutput', outputNames[renderLayer])
 	scene.select(bakeCol)
 	lx.eval('shader.setEffect shade.luminosity')
 	bakeCol.setParent(rnGroup)
@@ -127,5 +130,4 @@ if versions:
 
 	for l in scene.items('groupLocator'):
 		if l.name == 'LIGHTS':
-			for child in l.children():
-				child.channel('visible').set('allOff')
+			l.channel('visible').set('allOff')
