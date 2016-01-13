@@ -2,7 +2,6 @@
 
 import modo
 import lx
-import re
 
 scene = modo.scene.current()
 
@@ -35,4 +34,3 @@ for group in scene.renderItem.childrenByType('mask'):
 				if char.name.split('_')[1] in child.name:
 					scene.select(child)
 					lx.eval('mask.setMesh %s' % 'CHR_' + char.name.split('_')[1])
-

@@ -6,7 +6,7 @@ scene = modo.scene.current()
 
 abcFiles = []
 
-folder = r"W:\RTS\Caches\tch\q470\q470_s080\publish\maya\pcache"
+folder = r"W:\RTS\Caches\tch\q470\q470_sXXX\publish\maya\pcache"
 
 for abcFile in os.listdir(folder):
 	if abcFile.endswith('abc'):
